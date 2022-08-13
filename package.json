@@ -1,0 +1,28 @@
+{
+	"name": "data-visualization-app",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "webpack"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cmachin/Data-Visualization-App.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/cmachin/Data-Visualization-App/issues"
+	},
+	"homepage": "https://github.com/cmachin/Data-Visualization-App#readme",
+	"devDependencies": {
+		"webpack": "^5.74.0",
+		"webpack-cli": "^4.10.0"
+	},
+	"dependencies": {
+		"firebase": "^9.9.2"
+	}
+}

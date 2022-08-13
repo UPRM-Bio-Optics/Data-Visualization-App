@@ -1,8 +1,33 @@
+import { initializeApp } from "firebase/app";
+
 console.log("App starting...");
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+	apiKey: "AIzaSyCBXh6k0ZHD1yR9GQiCDT1HAjkKw42qty8",
+	authDomain: "data-visualization-28ffa.firebaseapp.com",
+	databaseURL: "https://data-visualization-28ffa-default-rtdb.firebaseio.com",
+	projectId: "data-visualization-28ffa",
+	storageBucket: "data-visualization-28ffa.appspot.com",
+	messagingSenderId: "127551212899",
+	appId: "1:127551212899:web:5e0175747191281fdb5756",
+	measurementId: "G-12TPCBZSD4",
+};
+
+var data_url = "../../data/echosounder/";
 
 var files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
 
-var url = "../data/echosounder/";
+for (index in files) {
+	$("#files").append(new Option((text = files[index]), (value = files[index])));
+}
+
+// function getFiles() {
+// 	console.log($("#csv-files").val());
+// 	for (file in $("#csv-files").files) {
+// 		console.log(file);
+// 	}
+// }
 
 var csv_data;
 var x_data;
@@ -15,17 +40,6 @@ var colorscale = [
 	[0.5, "rgb(100, 100, 255)"],
 	[1, "rgb(0, 0, 100)"],
 ];
-
-for (index in files) {
-	$("#files").append(new Option((text = files[index]), (value = files[index])));
-}
-
-function getFiles() {
-	console.log($("#csv-files").val());
-	for (file in $("#csv-files").files) {
-		console.log(file);
-	}
-}
 
 graph();
 
@@ -40,7 +54,7 @@ async function graph() {
 
 	console.log("Fetching data...");
 
-	await getData();
+	await parseData();
 
 	if ($("#contour").is(":checked")) {
 		$("#graph-heading").text("Contour Plot");
@@ -59,8 +73,8 @@ async function graph() {
 	console.log("Done!");
 }
 
-async function getData() {
-	await fetch(url + $("#files").val(), {
+async function parseData() {
+	await fetch(data_url + $("#files").val(), {
 		method: "get",
 		headers: {
 			"content-type": "text/csv;charset=UTF-8",

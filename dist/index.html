@@ -26,14 +26,15 @@
 				<div class="detail">
 					<h3>File:</h3>
 					<select name="files" id="files"></select>
-					<input
+					<!-- <input
 						type="file"
 						name="file"
 						id="csv-files"
 						accept="text/csv"
+						value="../../Data/depth_data"
 						onchange="getFiles()"
 						multiple
-					/>
+					/> -->
 				</div>
 				<div class="detail">
 					<h3>Visualization:</h3>
@@ -62,6 +63,6 @@
 				<div class="graph" id="plot-div"></div>
 			</div>
 		</div>
-		<script src="app.js" defer></script>
+		<script src="bundle.js" defer></script>
 	</body>
 </html>
