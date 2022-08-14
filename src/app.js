@@ -1,33 +1,8 @@
-import { initializeApp } from "firebase/app";
-
 console.log("App starting...");
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-	apiKey: "AIzaSyCBXh6k0ZHD1yR9GQiCDT1HAjkKw42qty8",
-	authDomain: "data-visualization-28ffa.firebaseapp.com",
-	databaseURL: "https://data-visualization-28ffa-default-rtdb.firebaseio.com",
-	projectId: "data-visualization-28ffa",
-	storageBucket: "data-visualization-28ffa.appspot.com",
-	messagingSenderId: "127551212899",
-	appId: "1:127551212899:web:5e0175747191281fdb5756",
-	measurementId: "G-12TPCBZSD4",
-};
 
 var data_url = "../../data/echosounder/";
 
 var files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
-
-for (index in files) {
-	$("#files").append(new Option((text = files[index]), (value = files[index])));
-}
-
-// function getFiles() {
-// 	console.log($("#csv-files").val());
-// 	for (file in $("#csv-files").files) {
-// 		console.log(file);
-// 	}
-// }
 
 var csv_data;
 var x_data;
@@ -41,7 +16,10 @@ var colorscale = [
 	[1, "rgb(0, 0, 100)"],
 ];
 
-graph();
+for (index in files) {
+	console.log(files[index]);
+	$("#files").append(new Option((text = files[index]), (value = files[index])));
+}
 
 async function graph() {
 	console.log("Initializing...");
@@ -159,48 +137,48 @@ function contourPlot() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
-function surfacePlot() {
-	console.log("Creating surface plot...");
+// function surfacePlot() {
+// 	console.log("Creating surface plot...");
 
-	var data = [
-		{
-			x: x_data,
-			y: y_data,
-			// z: [z_data, z_data],
-			z: surface_data,
-			type: "surface",
-		},
-	];
+// 	var data = [
+// 		{
+// 			x: x_data,
+// 			y: y_data,
+// 			// z: [z_data, z_data],
+// 			z: surface_data,
+// 			type: "surface",
+// 		},
+// 	];
 
-	var layout = {
-		autosize: true,
-		// width: "600",
-		height: "600",
-		margin: {
-			l: 0,
-			r: 0,
-			b: 0,
-			t: 30,
-		},
-		scene: {
-			xaxis: {
-				title: "Longuitud",
-				// range: [Math.min(...x_data), Math.max(...x_data)],
-			},
-			yaxis: {
-				title: "Latitude",
-				// range: [Math.min(...y_data), Math.max(...y_data)],
-			},
-			zaxis: {
-				title: "Depth",
-				autorange: "reversed",
-				range: [Math.max(...z_data) * 2, 0],
-			},
-		},
-	};
+// 	var layout = {
+// 		autosize: true,
+// 		// width: "600",
+// 		height: "600",
+// 		margin: {
+// 			l: 0,
+// 			r: 0,
+// 			b: 0,
+// 			t: 30,
+// 		},
+// 		scene: {
+// 			xaxis: {
+// 				title: "Longuitud",
+// 				// range: [Math.min(...x_data), Math.max(...x_data)],
+// 			},
+// 			yaxis: {
+// 				title: "Latitude",
+// 				// range: [Math.min(...y_data), Math.max(...y_data)],
+// 			},
+// 			zaxis: {
+// 				title: "Depth",
+// 				autorange: "reversed",
+// 				range: [Math.max(...z_data) * 2, 0],
+// 			},
+// 		},
+// 	};
 
-	Plotly.newPlot("plot-div", data, layout);
-}
+// 	Plotly.newPlot("plot-div", data, layout);
+// }
 
 function mesh3d() {
 	console.log("Creating 3D mesh...");
@@ -259,7 +237,6 @@ function mapOverlay() {
 			lon: x_data,
 			lat: y_data,
 			z: z_data,
-
 			colorscale: colorscale,
 		},
 	];
@@ -277,8 +254,8 @@ function mapOverlay() {
 				},
 			],
 			center: {
-				lon: x_data[0],
-				lat: y_data[0],
+				lon: (Math.max(...x_data) + Math.min(...x_data)) / 2,
+				lat: (Math.max(...y_data) + Math.min(...y_data)) / 2,
 			},
 			zoom: 19,
 		},
@@ -299,3 +276,5 @@ function mapOverlay() {
 
 	Plotly.newPlot("plot-div", data, layout);
 }
+
+graph();
