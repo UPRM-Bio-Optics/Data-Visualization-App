@@ -20,11 +20,14 @@ async function init() {
 	console.clear();
 
 	$("#graph-heading").text("Waiting for user input...");
+
 	$("#plot-div").empty();
 
 	url = "../../data/" + $("#sensors").val() + "/";
 
 	$("#files").empty();
+	$("label").hide();
+	$("input:radio").prop("checked", false);
 
 	if ($("#sensors").val() == "echosounder") {
 		for (index in echosounder_files) {
@@ -36,11 +39,10 @@ async function init() {
 				)
 			);
 		}
-
 		$("#contour-label").show();
 		$("#mesh-label").show();
 		$("#map-label").show();
-		$("#spectrum-label").hide();
+		// $("#spectrum-label").hide();
 	} else {
 		for (index in spectrometer_files) {
 			console.log(spectrometer_files[index]);
@@ -51,44 +53,45 @@ async function init() {
 				)
 			);
 		}
-		$("#contour-label").hide();
-		$("#mesh-label").hide();
-		$("#map-label").hide();
 		$("#spectrum-label").show();
 	}
 }
 
 async function graph() {
-	console.log("Initializing graph...");
+	if ($("input:radio").is(":checked")) {
+		console.log("Initializing graph...");
 
-	csv_data = [];
-	x_data = [];
-	y_data = [];
-	z_data = [];
-	surface_data = [];
+		csv_data = [];
+		x_data = [];
+		y_data = [];
+		z_data = [];
+		surface_data = [];
 
-	console.log("Fetching data...");
+		console.log("Fetching data...");
 
-	await parseData();
+		await parseData();
 
-	if ($("#contour").is(":checked")) {
-		$("#graph-heading").text("Contour Plot");
-		contourPlot();
-	} else if ($("#surface").is(":checked")) {
-		$("#graph-heading").text("Surface Plot");
-		surfacePlot();
-	} else if ($("#mesh").is(":checked")) {
-		$("#graph-heading").text("3D Mesh");
-		mesh3d();
-	} else if ($("#map").is(":checked")) {
-		$("#graph-heading").text("Map Overlay");
-		mapOverlay();
-	} else if ($("#spectrum").is(":checked")) {
-		$("#graph-heading").text("Spectrum");
-		spectrum();
+		if ($("#contour").is(":checked")) {
+			$("#graph-heading").text("Contour Plot");
+			contourPlot();
+		} else if ($("#surface").is(":checked")) {
+			$("#graph-heading").text("Surface Plot");
+			surfacePlot();
+		} else if ($("#mesh").is(":checked")) {
+			$("#graph-heading").text("3D Mesh");
+			mesh3d();
+		} else if ($("#map").is(":checked")) {
+			$("#graph-heading").text("Map Overlay");
+			mapOverlay();
+		} else if ($("#spectrum").is(":checked")) {
+			$("#graph-heading").text("Spectrum");
+			spectrum();
+		}
+		console.log("Done!");
+	} else {
+		alert("Error:\nPlease choose one of the visualization options");
+		console.log("ERROR: No visualization selected!");
 	}
-
-	console.log("Done!");
 }
 
 async function parseData() {
@@ -97,6 +100,8 @@ async function parseData() {
 		headers: {
 			"content-type": "text/csv;charset=UTF-8",
 		},
+		mode: "cors", // no-cors, *cors, same-origin
+		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 	})
 		.then((response) => {
 			// console.log(response.text())
