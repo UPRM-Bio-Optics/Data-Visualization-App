@@ -1,3 +1,3 @@
 # Data-Visualization-App
 
-JavaScript based tool for visualizing bathymetry data.
+JavaScript app for visualizing bathymetry data.
