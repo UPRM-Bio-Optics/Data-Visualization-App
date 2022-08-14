@@ -12,6 +12,8 @@ var csv_data;
 var x_data;
 var y_data;
 var z_data;
+var max_value;
+var min_value;
 
 // Graph color scale
 var colorscale = [
@@ -120,15 +122,17 @@ async function parseData() {
 		.then(() => {
 			for (index in csv_data) {
 				csv_data[index] = csv_data[index].split(",");
-				if (index > 0) {
-					if ($("#sensors").val() == "echosounder") {
-						y_data.push(+csv_data[index][0]);
-						x_data.push(+csv_data[index][1]);
-						z_data.push(+csv_data[index][2]);
-					} else {
-						x_data.push(+csv_data[index][0]);
-						y_data.push(+csv_data[index][1]);
-					}
+				if (index <= 0 || csv_data[index] == "") {
+					continue;
+				}
+				if ($("#sensors").val() == "echosounder") {
+					y_data.push(+csv_data[index][0]);
+					x_data.push(+csv_data[index][1]);
+					z_data.push(+csv_data[index][2]);
+				}
+				if ($("#sensors").val() == "spectrometer") {
+					x_data.push(+csv_data[index][0]);
+					y_data.push(+csv_data[index][1]);
 				}
 			}
 		})
@@ -151,10 +155,13 @@ async function parseData() {
 			}
 		})
 		.then(() => {
+			max_value = Math.max(...x_data);
+			min_value = Math.min(...x_data);
 			console.log("CSV Data:", csv_data);
 			console.log("X Data:", x_data);
 			console.log("Y Data:", y_data);
 			console.log("Z Data:", z_data);
+			console.log(max_value, min_value);
 		});
 }
 
@@ -208,6 +215,68 @@ function mesh3d() {
 
 			intensity: z_data,
 			colorscale: colorscale,
+			// opacity: 0.7,
+		},
+	];
+
+	var updatemenus = [
+		{
+			buttons: [
+				{
+					args: ["opacity", 1],
+					label: "Solid",
+					method: "restyle",
+				},
+				{
+					args: ["opacity", 0.5],
+					label: "Transparent",
+					method: "restyle",
+				},
+			],
+			direction: "left",
+			pad: { r: 0, l: 0, t: 0, b: 0 },
+			showactive: true,
+			type: "buttons",
+			// x: 0.05,
+			xanchor: "left",
+			y: 1.05,
+			yanchor: "top",
+			bgcolor: "rgb(255,255,255)",
+		},
+		{
+			buttons: [
+				{
+					args: [
+						{
+							"scene.xaxis.visible": true,
+							"scene.yaxis.visible": true,
+							"scene.zaxis.visible": true,
+						},
+					],
+					label: "Show Grid",
+					method: "relayout",
+				},
+				{
+					args: [
+						{
+							"scene.xaxis.visible": false,
+							"scene.yaxis.visible": false,
+							"scene.zaxis.visible": false,
+						},
+					],
+					label: "Hide Grid",
+					method: "relayout",
+				},
+			],
+			direction: "left",
+			pad: { r: 0, l: 0, t: 0, b: 0 },
+			showactive: true,
+			type: "buttons",
+			// x: 0.05,
+			xanchor: "left",
+			y: 0.99,
+			yanchor: "top",
+			bgcolor: "rgb(255,255,255)",
 		},
 	];
 
@@ -223,13 +292,16 @@ function mesh3d() {
 		scene: {
 			xaxis: {
 				title: "Longuitud",
+				showgrid: true,
 			},
 			yaxis: {
 				title: "Latitude",
+				showgrid: true,
 			},
 			zaxis: {
 				title: "Depth",
 				autorange: "reversed",
+				showgrid: true,
 			},
 			aspectmode: "manual",
 			aspectratio: {
@@ -240,6 +312,7 @@ function mesh3d() {
 		},
 		plot_bgcolor: bg_color,
 		paper_bgcolor: bg_color,
+		updatemenus: updatemenus,
 	};
 
 	Plotly.newPlot("plot-div", data, layout);
@@ -319,8 +392,9 @@ function spectrum() {
 			t: 30,
 		},
 		xaxis: {
-			type: "log",
-			autorange: true,
+			// type: "normal",
+			// autorange: false,
+			// range: [min_value, max_value],
 			title: csv_data[0][1],
 		},
 		yaxis: {
