@@ -1,9 +1,9 @@
 console.log("App starting...");
 
-var data_url = "../../data/echosounder/";
+var echosounder_files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
+var spectrometer_files = ["Jul-11-2022.csv"];
 
-var files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
-
+var url;
 var csv_data;
 var x_data;
 var y_data;
@@ -16,13 +16,50 @@ var colorscale = [
 	[1, "rgb(0, 0, 100)"],
 ];
 
-for (index in files) {
-	console.log(files[index]);
-	$("#files").append(new Option((text = files[index]), (value = files[index])));
+async function init() {
+	console.clear();
+
+	$("#graph-heading").text("Waiting for user input...");
+	$("#plot-div").empty();
+
+	url = "../../data/" + $("#sensors").val() + "/";
+
+	$("#files").empty();
+
+	if ($("#sensors").val() == "echosounder") {
+		for (index in echosounder_files) {
+			console.log(echosounder_files[index]);
+			$("#files").append(
+				new Option(
+					(text = echosounder_files[index]),
+					(value = echosounder_files[index])
+				)
+			);
+		}
+
+		$("#contour-label").show();
+		$("#mesh-label").show();
+		$("#map-label").show();
+		$("#spectrum-label").hide();
+	} else {
+		for (index in spectrometer_files) {
+			console.log(spectrometer_files[index]);
+			$("#files").append(
+				new Option(
+					(text = spectrometer_files[index]),
+					(value = spectrometer_files[index])
+				)
+			);
+		}
+		$("#contour-label").hide();
+		$("#mesh-label").hide();
+		$("#map-label").hide();
+		$("#spectrum-label").show();
+	}
 }
 
 async function graph() {
-	console.log("Initializing...");
+	console.log("Initializing graph...");
 
 	csv_data = [];
 	x_data = [];
@@ -46,13 +83,16 @@ async function graph() {
 	} else if ($("#map").is(":checked")) {
 		$("#graph-heading").text("Map Overlay");
 		mapOverlay();
+	} else if ($("#spectrum").is(":checked")) {
+		$("#graph-heading").text("Spectrum");
+		spectrum();
 	}
 
 	console.log("Done!");
 }
 
 async function parseData() {
-	await fetch(data_url + $("#files").val(), {
+	await fetch(url + $("#files").val(), {
 		method: "get",
 		headers: {
 			"content-type": "text/csv;charset=UTF-8",
@@ -69,9 +109,14 @@ async function parseData() {
 			for (index in csv_data) {
 				csv_data[index] = csv_data[index].split(",");
 				if (index > 0) {
-					y_data.push(+csv_data[index][0]);
-					x_data.push(+csv_data[index][1]);
-					z_data.push(+csv_data[index][2]);
+					if ($("#sensors").val() == "echosounder") {
+						y_data.push(+csv_data[index][0]);
+						x_data.push(+csv_data[index][1]);
+						z_data.push(+csv_data[index][2]);
+					} else {
+						x_data.push(+csv_data[index][0]);
+						y_data.push(+csv_data[index][1]);
+					}
 				}
 			}
 		})
@@ -98,7 +143,6 @@ async function parseData() {
 			console.log("X Data:", x_data);
 			console.log("Y Data:", y_data);
 			console.log("Z Data:", z_data);
-			console.log("Surface Data:", surface_data);
 		});
 }
 
@@ -136,49 +180,6 @@ function contourPlot() {
 
 	Plotly.newPlot("plot-div", data, layout);
 }
-
-// function surfacePlot() {
-// 	console.log("Creating surface plot...");
-
-// 	var data = [
-// 		{
-// 			x: x_data,
-// 			y: y_data,
-// 			// z: [z_data, z_data],
-// 			z: surface_data,
-// 			type: "surface",
-// 		},
-// 	];
-
-// 	var layout = {
-// 		autosize: true,
-// 		// width: "600",
-// 		height: "600",
-// 		margin: {
-// 			l: 0,
-// 			r: 0,
-// 			b: 0,
-// 			t: 30,
-// 		},
-// 		scene: {
-// 			xaxis: {
-// 				title: "Longuitud",
-// 				// range: [Math.min(...x_data), Math.max(...x_data)],
-// 			},
-// 			yaxis: {
-// 				title: "Latitude",
-// 				// range: [Math.min(...y_data), Math.max(...y_data)],
-// 			},
-// 			zaxis: {
-// 				title: "Depth",
-// 				autorange: "reversed",
-// 				range: [Math.max(...z_data) * 2, 0],
-// 			},
-// 		},
-// 	};
-
-// 	Plotly.newPlot("plot-div", data, layout);
-// }
 
 function mesh3d() {
 	console.log("Creating 3D mesh...");
@@ -277,4 +278,35 @@ function mapOverlay() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
-graph();
+function spectrum() {
+	console.log("Creating spectrum plot...");
+
+	var data = [
+		{
+			x: x_data,
+			y: y_data,
+			type: "scatter",
+			mode: "lines",
+			line: { color: "green" },
+		},
+	];
+
+	var layout = {
+		autosize: true,
+		height: "600",
+		margin: {
+			l: 70,
+			r: 0,
+			b: 40,
+			t: 30,
+		},
+		xaxis: {
+			type: "log",
+			autorange: true,
+		},
+	};
+
+	Plotly.newPlot("plot-div", data, layout);
+}
+
+init();
