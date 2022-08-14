@@ -1,5 +1,6 @@
 # Data-Visualization-App
 
+<<<<<<< HEAD
 JavaScript based tool for visualizing bathymetry data.
 
    How to run the app with VS Code:
@@ -12,3 +13,6 @@ JavaScript based tool for visualizing bathymetry data.
       1. Add csv files to the respective folders inside the "data" folder.
       2. Inside the app.js file, add the name of the file as an element in the respective list variable.
 
+=======
+JavaScript app for visualizing bathymetry data.
+>>>>>>> 6a40844eb0600705d0dffb3a675d779a741bee1e
