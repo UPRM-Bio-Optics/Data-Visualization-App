@@ -16,6 +16,8 @@ var colorscale = [
 	[1, "rgb(0, 0, 100)"],
 ];
 
+var bg_color = "rgba(0, 0, 0, 0)";
+
 async function init() {
 	console.clear();
 
@@ -181,6 +183,8 @@ function contourPlot() {
 			b: 40,
 			t: 30,
 		},
+		plot_bgcolor: bg_color,
+		paper_bgcolor: bg_color,
 	};
 
 	Plotly.newPlot("plot-div", data, layout);
@@ -229,6 +233,8 @@ function mesh3d() {
 				z: 0.5,
 			},
 		},
+		plot_bgcolor: bg_color,
+		paper_bgcolor: bg_color,
 	};
 
 	Plotly.newPlot("plot-div", data, layout);
@@ -278,6 +284,8 @@ function mapOverlay() {
 			b: 0,
 			t: 30,
 		},
+		plot_bgcolor: bg_color,
+		paper_bgcolor: bg_color,
 	};
 
 	Plotly.newPlot("plot-div", data, layout);
@@ -309,6 +317,8 @@ function spectrum() {
 			type: "log",
 			autorange: true,
 		},
+		plot_bgcolor: bg_color,
+		paper_bgcolor: bg_color,
 	};
 
 	Plotly.newPlot("plot-div", data, layout);

@@ -2,6 +2,14 @@
 	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+	background: linear-gradient(
+		to right,
+		hsl(115, 100%, 98%),
+		hsl(216, 100%, 93%)
+	);
+}
+
 h1 {
 	font-size: 24px;
 }
@@ -15,30 +23,40 @@ h3 {
 	margin-bottom: 5px;
 }
 
-input[type="file"] {
-	margin-top: 10px;
-}
-
 select {
 	width: 100%;
 	font-size: 14px;
+	border: none;
+	box-shadow: 0 0 1px 1px rgb(177, 177, 177);
+	background: rgba(255, 255, 255, 10%);
 }
 
 select:hover {
 	background: rgb(225, 225, 225);
-	box-shadow: 0 0 10px 1px rgb(222, 222, 222);
+	box-shadow: 0 0 3px 1px rgb(177, 177, 177);
 }
 
 select:focus {
 	background: rgb(225, 225, 225);
-	box-shadow: 0 0 10px 1px rgb(222, 222, 222);
+	box-shadow: 0 0 3px 1px rgb(177, 177, 177);
 }
 
 label {
 	font-size: 14px;
 }
 
+button {
+	border: none;
+	background: rgba(70, 134, 75, 90%);
+	color: white;
+	padding: 5px;
+	width: 25%;
+	min-width: max-content;
+}
+
 button:hover {
+	background: hsl(124, 50%, 40%);
+	box-shadow: 0 0 2px 1px rgb(54, 54, 54);
 	cursor: pointer;
 }
 
@@ -82,7 +100,6 @@ button:active {
 	width: calc(100% - 60px);
 	height: 100%;
 	display: flex;
-	/* border: 2px solid black; */
 }
 
 .details-container {
@@ -91,6 +108,7 @@ button:active {
 	height: max-content;
 	margin-right: 20px;
 	box-shadow: 0 0 10px 1px rgb(182, 182, 182);
+	background: hsla(0, 0%, 100%, 40%);
 }
 
 .container-heading {
@@ -114,6 +132,7 @@ button:active {
 	width: calc(90% - 20px);
 	height: 100%;
 	box-shadow: 0 0 10px 1px rgb(182, 182, 182);
+	background: hsla(0, 0%, 100%, 40%);
 }
 
 .graph {
