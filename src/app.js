@@ -1,21 +1,26 @@
 console.log("App starting...");
 
+// Lists of file names
 var echosounder_files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
 var spectrometer_files = ["Jul-11-2022.csv"];
 
+// File paths url
 var url;
+
+// Plotting parameters
 var csv_data;
 var x_data;
 var y_data;
 var z_data;
-var surface_data;
 
+// Graph color scale
 var colorscale = [
 	[0, "rgb(220, 220, 255)"],
 	[0.5, "rgb(100, 100, 255)"],
 	[1, "rgb(0, 0, 100)"],
 ];
 
+// Graph background color
 var bg_color = "rgba(0, 0, 0, 0)";
 
 async function init() {
@@ -316,6 +321,10 @@ function spectrum() {
 		xaxis: {
 			type: "log",
 			autorange: true,
+			title: csv_data[0][1],
+		},
+		yaxis: {
+			title: csv_data[0][0],
 		},
 		plot_bgcolor: bg_color,
 		paper_bgcolor: bg_color,
