@@ -1,10 +1,11 @@
-console.log("App starting...");
+// Data visualization tool for CSV files
+// Authors: UPRM Bio-Optics undergraduate research students
 
-// Lists of file names
+// Lists of file names - Add new file name here
 var echosounder_files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
 var spectrometer_files = ["Jul-11-2022.csv"];
 
-// File paths url
+// Files path url
 var url;
 
 // Plotting parameters
@@ -12,8 +13,6 @@ var csv_data;
 var x_data;
 var y_data;
 var z_data;
-var max_value;
-var min_value;
 
 // Graph color scale
 var colorscale = [
@@ -25,19 +24,26 @@ var colorscale = [
 // Graph background color
 var bg_color = "rgba(0, 0, 0, 0)";
 
+// Initialize DOM elements
 async function init() {
+	// Clear console
 	console.clear();
 
+	// Waiting for input state
 	$("#graph-heading").text("Waiting for user input...");
-
 	$("#plot-div").empty();
 
+	// Set the url to the file chosen on the dropdown
 	url = "../../data/" + $("#sensors").val() + "/";
 
+	// Empty files in dropdown
 	$("#files").empty();
+
+	// Hide and uncheck unnecesary visiualization options
 	$("label").hide();
 	$("input:radio").prop("checked", false);
 
+	// Add echosounder files to dropdown if the sensor is selected
 	if ($("#sensors").val() == "echosounder") {
 		for (index in echosounder_files) {
 			console.log(echosounder_files[index]);
@@ -48,11 +54,15 @@ async function init() {
 				)
 			);
 		}
+
+		// Show the options for echosounder graphs
 		$("#contour-label").show();
 		$("#mesh-label").show();
 		$("#map-label").show();
-		// $("#spectrum-label").hide();
-	} else {
+	}
+
+	// Add spectrometer files to dropdown if the sensor is selected
+	if ($("#sensors").val() == "echosounder") {
 		for (index in spectrometer_files) {
 			console.log(spectrometer_files[index]);
 			$("#files").append(
@@ -62,24 +72,29 @@ async function init() {
 				)
 			);
 		}
+		// Show the options for spectrometer graphs
 		$("#spectrum-label").show();
 	}
 }
 
+// Initialize graph properties and call respective functions
 async function graph() {
+	// Check if a visualization option is selected
 	if ($("input:radio").is(":checked")) {
 		console.log("Initializing graph...");
 
+		// Initialize data variables
 		csv_data = [];
 		x_data = [];
 		y_data = [];
 		z_data = [];
-		surface_data = [];
 
 		console.log("Fetching data...");
 
+		// Wait for this function to parse data
 		await parseData();
 
+		// Determine which graphing method to use
 		if ($("#contour").is(":checked")) {
 			$("#graph-heading").text("Contour Plot");
 			contourPlot();
@@ -97,13 +112,17 @@ async function graph() {
 			spectrum();
 		}
 		console.log("Done!");
-	} else {
+	}
+	// Notify the user to select a visualization option before pressing confirm
+	else {
 		alert("Error:\nPlease choose one of the visualization options");
 		console.log("ERROR: No visualization selected!");
 	}
 }
 
+// Parse file into graphing data
 async function parseData() {
+	// Wait for the fetch api to fetch the file
 	await fetch(url + $("#files").val(), {
 		method: "get",
 		headers: {
@@ -112,51 +131,38 @@ async function parseData() {
 		mode: "cors", // no-cors, *cors, same-origin
 		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 	})
+		// Parse the data into a string
 		.then((response) => {
-			// console.log(response.text())
 			return response.text();
 		})
+		// Split the data for each rows
 		.then((data) => {
 			csv_data = data.split("\r\n");
 		})
+		// Parse data into necessary values for graphing
 		.then(() => {
 			for (index in csv_data) {
+				// Split the data for each value
 				csv_data[index] = csv_data[index].split(",");
+				// Check if data is a column name or is empty
 				if (index <= 0 || csv_data[index] == "") {
 					continue;
 				}
+				// Check if data is for echosounder
 				if ($("#sensors").val() == "echosounder") {
 					y_data.push(+csv_data[index][0]);
 					x_data.push(+csv_data[index][1]);
 					z_data.push(+csv_data[index][2]);
 				}
+				// Check if data is for spectrometer
 				if ($("#sensors").val() == "spectrometer") {
 					x_data.push(+csv_data[index][0]);
 					y_data.push(+csv_data[index][1]);
 				}
 			}
 		})
+		// Log variables to console for testing
 		.then(() => {
-			for (value in z_data) {
-				var temp = [];
-				for (index in z_data) {
-					if (index == value) {
-						temp.push(z_data[value]);
-					} else {
-						// temp.push(0);
-						temp.push(0);
-					}
-				}
-				// for (var i = 0; i < value; i++) {
-				// 	var newFirst = temp.shift();
-				// 	temp.push(newFirst);
-				// }
-				surface_data.push(temp);
-			}
-		})
-		.then(() => {
-			max_value = Math.max(...x_data);
-			min_value = Math.min(...x_data);
 			console.log("CSV Data:", csv_data);
 			console.log("X Data:", x_data);
 			console.log("Y Data:", y_data);
@@ -165,9 +171,11 @@ async function parseData() {
 		});
 }
 
+// Create contour plot
 function contourPlot() {
 	console.log("Creating contour plot...");
 
+	// Object variables for Plotly
 	var data = [
 		{
 			x: x_data,
@@ -202,9 +210,11 @@ function contourPlot() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
+// Create 3D mesh
 function mesh3d() {
 	console.log("Creating 3D mesh...");
 
+	// Object variables for Plotly
 	var data = [
 		{
 			z: z_data,
@@ -318,9 +328,11 @@ function mesh3d() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
+// Cretea map overlay
 function mapOverlay() {
 	console.log("Creating Map Overlay...");
 
+	// Object variables for Plotly
 	var data = [
 		{
 			type: "densitymapbox",
@@ -369,9 +381,11 @@ function mapOverlay() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
+// Create spectrum graph
 function spectrum() {
 	console.log("Creating spectrum plot...");
 
+	// Object variables for Plotly
 	var data = [
 		{
 			x: x_data,
@@ -407,4 +421,6 @@ function spectrum() {
 	Plotly.newPlot("plot-div", data, layout);
 }
 
+// Start application
+console.log("App starting...");
 init();
