@@ -2,8 +2,8 @@
 // Authors: UPRM Bio-Optics undergraduate research students
 
 // Lists of file names - Add new file name here
-var echosounder_files = ["Jul-26-2022.csv", "Mar-25-2022.csv"];
-var spectrometer_files = ["Jul-11-2022.csv"];
+var echosounder_files = [];
+var spectrometer_files = [];
 
 // Files path url
 var url;
@@ -33,20 +33,21 @@ async function init() {
 	$("#graph-heading").text("Waiting for user input...");
 	$("#plot-div").empty();
 
-	// Set the url to the file chosen on the dropdown
-	url = "../../data/" + $("#sensors").val() + "/";
-
 	// Empty files in dropdown
 	$("#files").empty();
 
-	// Hide and uncheck unnecesary visiualization options
+	// Hide visiualization options
 	$("label").hide();
+
+	// Uncheck options
 	$("input:radio").prop("checked", false);
+
+	// Fetch csv files
+	await fetchFiles();
 
 	// Add echosounder files to dropdown if the sensor is selected
 	if ($("#sensors").val() == "echosounder") {
 		for (index in echosounder_files) {
-			console.log(echosounder_files[index]);
 			$("#files").append(
 				new Option(
 					(text = echosounder_files[index]),
@@ -59,12 +60,15 @@ async function init() {
 		$("#contour-label").show();
 		$("#mesh-label").show();
 		$("#map-label").show();
+
+		// Set the url to the echosounder files
+		url =
+			"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/depth_data/";
 	}
 
 	// Add spectrometer files to dropdown if the sensor is selected
-	if ($("#sensors").val() == "echosounder") {
+	if ($("#sensors").val() == "spectrometer") {
 		for (index in spectrometer_files) {
-			console.log(spectrometer_files[index]);
 			$("#files").append(
 				new Option(
 					(text = spectrometer_files[index]),
@@ -74,15 +78,54 @@ async function init() {
 		}
 		// Show the options for spectrometer graphs
 		$("#spectrum-label").show();
+
+		// Set the url to the spectrometer files
+		url =
+			"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/Spectrometer/csv/";
 	}
+
+	await fetchFiles();
+}
+
+// Fetch list of csv files in Github repo
+async function fetchFiles() {
+	var repo =
+		"https://api.github.com/repos/UPRM-Bio-Optics/Bathymetry-Observation-Boat/git/trees/main?recursive=1";
+
+	await fetch(repo)
+		.then((response) => {
+			console.log(response);
+			return response.json();
+		})
+		.then((data) => {
+			for (i in data.tree) {
+				// console.log(data.tree[i].path);
+				if (
+					data.tree[i].path.includes("depth_data") &&
+					data.tree[i].path.includes("csv")
+				) {
+					console.log("Echosouder files: ", data.tree[i].path);
+					echosounder_files.push(
+						data.tree[i].path.replace("Data/depth_data/", "")
+					);
+				}
+				if (
+					data.tree[i].path.includes("Spectrometer") &&
+					data.tree[i].path.includes(".csv")
+				) {
+					console.log("Spectrometer files: ", data.tree[i].path);
+					spectrometer_files.push(
+						data.tree[i].path.replace("Data/Spectrometer/csv/", "")
+					);
+				}
+			}
+		});
 }
 
 // Initialize graph properties and call respective functions
 async function graph() {
 	// Check if a visualization option is selected
 	if ($("input:radio").is(":checked")) {
-		console.log("Initializing graph...");
-
 		// Initialize data variables
 		csv_data = [];
 		x_data = [];
@@ -111,7 +154,6 @@ async function graph() {
 			$("#graph-heading").text("Spectrum");
 			spectrum();
 		}
-		console.log("Done!");
 	}
 	// Notify the user to select a visualization option before pressing confirm
 	else {
@@ -125,11 +167,11 @@ async function parseData() {
 	// Wait for the fetch api to fetch the file
 	await fetch(url + $("#files").val(), {
 		method: "get",
-		headers: {
-			"content-type": "text/csv;charset=UTF-8",
-		},
-		mode: "cors", // no-cors, *cors, same-origin
-		cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+		// headers: {
+		// 	"content-type": "text/csv;charset=UTF-8",
+		// },
+		// mode: "no-cors", // no-cors, *cors, same-origin
+		// cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
 	})
 		// Parse the data into a string
 		.then((response) => {
@@ -167,7 +209,6 @@ async function parseData() {
 			console.log("X Data:", x_data);
 			console.log("Y Data:", y_data);
 			console.log("Z Data:", z_data);
-			console.log(max_value, min_value);
 		});
 }
 
@@ -408,7 +449,6 @@ function spectrum() {
 		xaxis: {
 			// type: "normal",
 			// autorange: false,
-			// range: [min_value, max_value],
 			title: csv_data[0][1],
 		},
 		yaxis: {
@@ -422,5 +462,4 @@ function spectrum() {
 }
 
 // Start application
-console.log("App starting...");
 init();

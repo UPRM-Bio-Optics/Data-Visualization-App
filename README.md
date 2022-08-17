@@ -11,5 +11,4 @@
 
 ### How to add CSV files:
 
-1. Add the CSV file to the respective folders inside the "data" folder.
-2. Inside the app.js file, add the name of the file as an element inside the respective list variable.
+1. Push code after mission ends and new CSVs were generated.
