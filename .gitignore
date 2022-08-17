@@ -1,2 +1,4 @@
 ### VisualStudioCode ###
 .vscode/*
+node_modules
+build
