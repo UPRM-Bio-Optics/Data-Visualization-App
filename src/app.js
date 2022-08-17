@@ -43,48 +43,46 @@ async function init() {
 	$("input:radio").prop("checked", false);
 
 	// Fetch csv files
-	await fetchFiles();
+	await fetchFiles().then(() => {
+		// Add echosounder files to dropdown if the sensor is selected
+		if ($("#sensors").val() == "echosounder") {
+			for (index in echosounder_files) {
+				$("#files").append(
+					new Option(
+						(text = echosounder_files[index]),
+						(value = echosounder_files[index])
+					)
+				);
+			}
 
-	// Add echosounder files to dropdown if the sensor is selected
-	if ($("#sensors").val() == "echosounder") {
-		for (index in echosounder_files) {
-			$("#files").append(
-				new Option(
-					(text = echosounder_files[index]),
-					(value = echosounder_files[index])
-				)
-			);
+			// Show the options for echosounder graphs
+			$("#contour-label").show();
+			$("#mesh-label").show();
+			$("#map-label").show();
+
+			// Set the url to the echosounder files
+			url =
+				"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/depth_data/";
 		}
 
-		// Show the options for echosounder graphs
-		$("#contour-label").show();
-		$("#mesh-label").show();
-		$("#map-label").show();
+		// Add spectrometer files to dropdown if the sensor is selected
+		if ($("#sensors").val() == "spectrometer") {
+			for (index in spectrometer_files) {
+				$("#files").append(
+					new Option(
+						(text = spectrometer_files[index]),
+						(value = spectrometer_files[index])
+					)
+				);
+			}
+			// Show the options for spectrometer graphs
+			$("#spectrum-label").show();
 
-		// Set the url to the echosounder files
-		url =
-			"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/depth_data/";
-	}
-
-	// Add spectrometer files to dropdown if the sensor is selected
-	if ($("#sensors").val() == "spectrometer") {
-		for (index in spectrometer_files) {
-			$("#files").append(
-				new Option(
-					(text = spectrometer_files[index]),
-					(value = spectrometer_files[index])
-				)
-			);
+			// Set the url to the spectrometer files
+			url =
+				"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/Spectrometer/csv/";
 		}
-		// Show the options for spectrometer graphs
-		$("#spectrum-label").show();
-
-		// Set the url to the spectrometer files
-		url =
-			"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/Spectrometer/csv/";
-	}
-
-	await fetchFiles();
+	});
 }
 
 // Fetch list of csv files in Github repo
@@ -92,34 +90,34 @@ async function fetchFiles() {
 	var repo =
 		"https://api.github.com/repos/UPRM-Bio-Optics/Bathymetry-Observation-Boat/git/trees/main?recursive=1";
 
-	await fetch(repo)
-		.then((response) => {
-			console.log(response);
-			return response.json();
-		})
-		.then((data) => {
-			for (i in data.tree) {
-				// console.log(data.tree[i].path);
-				if (
-					data.tree[i].path.includes("depth_data") &&
-					data.tree[i].path.includes("csv")
-				) {
-					console.log("Echosouder files: ", data.tree[i].path);
-					echosounder_files.push(
-						data.tree[i].path.replace("Data/depth_data/", "")
-					);
+	if (echosounder_files.length == 0 && spectrometer_files.length == 0) {
+		await fetch(repo)
+			.then((response) => {
+				return response.json();
+			})
+			.then((data) => {
+				for (i in data.tree) {
+					if (
+						data.tree[i].path.includes("depth_data") &&
+						data.tree[i].path.includes("csv")
+					) {
+						console.log("Echosouder files: ", data.tree[i].path);
+						echosounder_files.push(
+							data.tree[i].path.replace("Data/depth_data/", "")
+						);
+					}
+					if (
+						data.tree[i].path.includes("Spectrometer") &&
+						data.tree[i].path.includes(".csv")
+					) {
+						console.log("Spectrometer files: ", data.tree[i].path);
+						spectrometer_files.push(
+							data.tree[i].path.replace("Data/Spectrometer/csv/", "")
+						);
+					}
 				}
-				if (
-					data.tree[i].path.includes("Spectrometer") &&
-					data.tree[i].path.includes(".csv")
-				) {
-					console.log("Spectrometer files: ", data.tree[i].path);
-					spectrometer_files.push(
-						data.tree[i].path.replace("Data/Spectrometer/csv/", "")
-					);
-				}
-			}
-		});
+			});
+	}
 }
 
 // Initialize graph properties and call respective functions
@@ -165,21 +163,14 @@ async function graph() {
 // Parse file into graphing data
 async function parseData() {
 	// Wait for the fetch api to fetch the file
-	await fetch(url + $("#files").val(), {
-		method: "get",
-		// headers: {
-		// 	"content-type": "text/csv;charset=UTF-8",
-		// },
-		// mode: "no-cors", // no-cors, *cors, same-origin
-		// cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-	})
+	await fetch(url + $("#files").val())
 		// Parse the data into a string
 		.then((response) => {
 			return response.text();
 		})
 		// Split the data for each rows
 		.then((data) => {
-			csv_data = data.split("\r\n");
+			csv_data = data.split("\n");
 		})
 		// Parse data into necessary values for graphing
 		.then(() => {
@@ -462,4 +453,6 @@ function spectrum() {
 }
 
 // Start application
+
+// Initialize App
 init();
