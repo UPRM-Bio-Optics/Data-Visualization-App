@@ -391,7 +391,7 @@ function mapOverlay() {
 				lon: (Math.max(...x_data) + Math.min(...x_data)) / 2,
 				lat: (Math.max(...y_data) + Math.min(...y_data)) / 2,
 			},
-			zoom: 19,
+			zoom: 17,
 		},
 		xaxis: {
 			title: csv_data[1],
@@ -451,8 +451,6 @@ function spectrum() {
 
 	Plotly.newPlot("plot-div", data, layout);
 }
-
-// Start application
 
 // Initialize App
 init();
