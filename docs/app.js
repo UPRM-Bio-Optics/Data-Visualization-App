@@ -21,6 +21,10 @@ var colorscale = [
 	[1, "rgb(0, 0, 100)"],
 ];
 
+// "Earth";
+// "YlGnBu";
+// "Jet";
+
 // Graph background color
 var bg_color = "rgba(0, 0, 0, 0)";
 
