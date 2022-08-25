@@ -80,7 +80,7 @@ button:active {
 }
 
 .banner {
-	background: url(../assets/img/ocean.png);
+	background: url(./assets/img/ocean.png);
 	position: absolute;
 	left: 0;
 	top: 0;
@@ -95,7 +95,7 @@ button:active {
 	line-height: 70px;
 	text-indent: 110px;
 	color: white;
-	background: url(../assets/img/bio-optics_logo.png) no-repeat left;
+	background: url(./assets/img/bio-optics_logo.png) no-repeat left;
 	background-size: 100px;
 	min-width: max-content;
 }
