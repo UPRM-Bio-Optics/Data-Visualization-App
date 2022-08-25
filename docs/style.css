@@ -1,12 +1,9 @@
 :root {
-	--bg-color: linear-gradient(
-		to bottom,
-		hsl(113, 100%, 96%),
-		hsl(216, 100%, 93%)
-	);
+	--bg-color: whitesmoke;
+
 	--uprm-green: rgb(73, 141, 78);
-	--card-color: rgba(255, 255, 255, 0.492);
-	--card-shadow: 0 0 3px 1px rgb(195, 195, 195);
+	--card-color: white;
+	--card-shadow: 0 0 4px 2px rgb(173, 172, 172);
 }
 
 * {
@@ -47,12 +44,12 @@ select {
 
 select:hover {
 	/* background: rgb(244, 244, 244); */
-	box-shadow: 0 0 4px 1px rgb(177, 177, 177);
+	box-shadow: var(--card-shadow);
 }
 
 select:focus {
 	background: rgb(244, 244, 244);
-	box-shadow: 0 0 4px 1px rgb(177, 177, 177);
+	box-shadow: var(--card-shadow);
 }
 
 label {
@@ -74,7 +71,7 @@ button {
 }
 
 button:hover {
-	box-shadow: 0 0 4px 1px rgb(177, 177, 177);
+	box-shadow: var(--card-shadow);
 	cursor: pointer;
 }
 
