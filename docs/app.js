@@ -15,13 +15,14 @@ var y_data;
 var z_data;
 
 // Graph color scale
-var colorscale = [
-	[0, "rgb(220, 220, 255)"],
-	[0.5, "rgb(100, 100, 255)"],
-	[1, "rgb(0, 0, 100)"],
-];
+var colorscale = 
+// [
+// 	[0, "rgb(220, 220, 255)"],
+// 	[0.5, "rgb(100, 100, 255)"],
+// 	[1, "rgb(0, 0, 100)"],
+// ];
 
-// "Earth";
+"Earth";
 // "YlGnBu";
 // "Jet";
 
