@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.70c98744.css",
-    "main.js": "/static/js/main.643150b3.js",
-    "static/media/ocean.png": "/static/media/ocean.0957d5c60f918f430341.png",
-    "static/media/bio-optics_logo.png": "/static/media/bio-optics_logo.a7da80a180df6d0f5415.png",
-    "index.html": "/index.html",
-    "main.70c98744.css.map": "/static/css/main.70c98744.css.map",
-    "main.643150b3.js.map": "/static/js/main.643150b3.js.map"
+    "main.css": "/data-visualization-app/static/css/main.335a5761.css",
+    "main.js": "/data-visualization-app/static/js/main.643150b3.js",
+    "static/media/ocean.png": "/data-visualization-app/static/media/ocean.0957d5c60f918f430341.png",
+    "static/media/bio-optics_logo.png": "/data-visualization-app/static/media/bio-optics_logo.a7da80a180df6d0f5415.png",
+    "index.html": "/data-visualization-app/index.html",
+    "main.335a5761.css.map": "/data-visualization-app/static/css/main.335a5761.css.map",
+    "main.643150b3.js.map": "/data-visualization-app/static/js/main.643150b3.js.map"
   },
   "entrypoints": [
-    "static/css/main.70c98744.css",
+    "static/css/main.335a5761.css",
     "static/js/main.643150b3.js"
   ]
 }
