@@ -1,30 +1,58 @@
 :root {
-	font-size: 62.5%;
-	--bg-color: whitesmoke;
+	--bg-color: rgb(245, 245, 245);
 	--uprm-green: rgb(73, 141, 78);
-	--card-color: white;
-	--card-shadow: 0 0 1rem 0.3rem rgb(230, 230, 230);
+	--container-color: rgb(255, 255, 255);
+	--container-shadow: 0 0 1rem 0.3rem rgb(205, 205, 205);
 }
 
-*,
-*::before,
-::after {
-	font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+* {
+	font-family: Arial;
 }
 
 body {
-	font-size: 1.6;
 	margin: 0;
 	background: var(--bg-color);
 }
 
 h1 {
-	font-size: 2.3rem;
-	margin: 3rem;
+	font-size: 24px;
+	width: 100%;
 }
 
 h2 {
-	font-size: 1.7rem;
+	font-size: 18px;
+	width: 100%;
+}
+
+h3 {
+	font-size: 15px;
+	margin-bottom: 5px;
+	width: 100%;
+}
+
+select {
+	width: 85%;
+	font-size: 14px;
+	background: whitesmoke;
+	border: 1px solid rgb(208, 208, 208);
+}
+
+select:hover {
+	box-shadow: var(--container-shadow);
+}
+
+select:focus {
+	background: rgb(244, 244, 244);
+	box-shadow: var(--container-shadow);
+}
+
+label {
+	font-size: 14px;
+	min-width: max-content;
+}
+
+input[type="radio"] {
+	min-width: max-content;
 }
 
 .banner {
@@ -32,51 +60,84 @@ h2 {
 	top: 0;
 	left: 0;
 	width: 100%;
-	box-shadow: 0 0 0.5rem 0.3rem rgb(116, 116, 116);
+	box-shadow: 0 0 0.5rem 0.2rem rgb(116, 116, 116);
 }
 
 .logo {
-	font-size: 2rem;
-	line-height: 7rem;
-	text-indent: 11rem;
+	font-size: 1.3rem;
+	line-height: 4rem;
+	text-indent: 8rem;
 	color: white;
 	background: url(../assets/img/bio-optics_logo.png) no-repeat left;
-	background-size: 10rem;
+	background-size: 7rem;
 }
 
-.app-container {
-	margin: 3rem;
+.content-container,
+.options-container,
+.data-container {
+	/* border: 1px solid black; */
+}
+
+.content-container {
 	display: flex;
-	align-items: center;
-	height: 50rem;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-evenly;
 }
 
-.nav-bar {
-	width: 30rem;
-	height: 100%;
-	background: var(--card-color);
-	box-shadow: var(--card-shadow);
-	margin-right: 1rem;
+.options-container {
+	margin: 0.5rem;
+	background: white;
+	width: 15rem;
+	background: var(--container-color);
+	box-shadow: var(--container-shadow);
 }
 
-.options-card {
-	width: 50rem;
-	height: 100%;
-	background: var(--card-color);
-	box-shadow: var(--card-shadow);
-	margin-right: 1rem;
+.data-container {
+	margin: 0.5rem;
+	background: white;
+	width: 80%;
+	height: 0;
+	padding-bottom: 15%;
+	min-width: 30rem;
+	min-height: 30rem;
+	background: var(--container-color);
+	box-shadow: var(--container-shadow);
 }
 
-.graph-card {
+.heading-container {
+	margin: 0;
 	width: 100%;
-	height: 100%;
-	background: var(--card-color);
-	box-shadow: var(--card-shadow);
-	margin-right: 1rem;
+	background: var(--uprm-green);
+	color: white;
+	text-align: center;
+	box-shadow: 0 0.1rem 0.1rem 0 rgb(116, 116, 116);
 }
 
-.heading {
+.option {
+	width: 100%;
+	margin: 1rem;
+}
+
+.confirm-button {
 	width: 100%;
 	text-align: center;
-	border-bottom: 0.2rem solid var(--uprm-green);
+}
+
+#confirm-button {
+	margin: 1rem;
+	border: none;
+	width: 4rem;
+	height: 2rem;
+	background: var(--uprm-green);
+	color: white;
+}
+
+#confirm-button:hover {
+	box-shadow: var(--container-shadow);
+	cursor: pointer;
+}
+
+#confirm-button:active {
+	cursor: wait;
 }
