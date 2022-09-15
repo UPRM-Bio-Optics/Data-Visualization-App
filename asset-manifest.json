@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/Data-Visualization-App/static/css/main.1d9a6a72.css",
-    "main.js": "/Data-Visualization-App/static/js/main.643150b3.js",
+    "main.css": "/Data-Visualization-App/static/css/main.5f73be50.css",
+    "main.js": "/Data-Visualization-App/static/js/main.d35597ab.js",
     "static/media/ocean.png": "/Data-Visualization-App/static/media/ocean.0957d5c60f918f430341.png",
     "static/media/bio-optics_logo.png": "/Data-Visualization-App/static/media/bio-optics_logo.a7da80a180df6d0f5415.png",
     "index.html": "/Data-Visualization-App/index.html",
-    "main.1d9a6a72.css.map": "/Data-Visualization-App/static/css/main.1d9a6a72.css.map",
-    "main.643150b3.js.map": "/Data-Visualization-App/static/js/main.643150b3.js.map"
+    "main.5f73be50.css.map": "/Data-Visualization-App/static/css/main.5f73be50.css.map",
+    "main.d35597ab.js.map": "/Data-Visualization-App/static/js/main.d35597ab.js.map"
   },
   "entrypoints": [
-    "static/css/main.1d9a6a72.css",
-    "static/js/main.643150b3.js"
+    "static/css/main.5f73be50.css",
+    "static/js/main.d35597ab.js"
   ]
 }
