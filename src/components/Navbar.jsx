@@ -6,7 +6,7 @@ import Slide from "@mui/material/Slide";
 import Tab from "@mui/material/Tab";
 import * as React from "react";
 import Graph from "./Graph";
-import Mqtt from "./Mqtt";
+import Logger from "./Logger";
 
 export default function Navbar() {
 	const [value, setValue] = React.useState("1");
@@ -31,7 +31,7 @@ export default function Navbar() {
 				</Box>
 				<Slide direction="right" in={value === "1"} mountOnEnter unmountOnExit>
 					<TabPanel value="1" index={0}>
-						<Mqtt></Mqtt>
+						<Logger></Logger>
 					</TabPanel>
 				</Slide>
 				<Slide direction="left" in={value === "2"} mountOnEnter unmountOnExit>

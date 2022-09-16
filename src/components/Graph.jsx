@@ -1,11 +1,8 @@
-import $ from "jquery";
+// import $ from "jquery";
 // import Plotly from "plotly.js";
 import * as React from "react";
 
 export default function GraphOptions() {
-	// React.useEffect(() => {
-	// 	init();
-	// }, []);
 	return (
 		<div className="content-container">
 			<div className="options-container">
