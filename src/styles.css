@@ -96,11 +96,8 @@ input[type="radio"] {
 .data-container {
 	margin: 0.5rem;
 	background: white;
-	width: 80%;
-	height: 0;
-	padding-bottom: 15%;
-	min-width: 30rem;
-	min-height: 30rem;
+	min-width: 40rem;
+	min-height: 40rem;
 	background: var(--container-color);
 	box-shadow: var(--container-shadow);
 }

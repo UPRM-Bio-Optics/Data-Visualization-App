@@ -1,28 +1,38 @@
-import mqtt from "precompiled-mqtt";
 import * as React from "react";
+import mqtt from "precompiled-mqtt";
 
 export default function Logger() {
-	var protocol = "ws";
-	var host = "test.mosquitto.org";
-	var port = "8080";
-	var topic = "SSH/NCAS-M";
-	var logs = [];
-	var status = "Waiting for user input...";
+	const [host, setHost] = React.useState("mqtt://test.mosquitto.org");
+	const [port, setPort] = React.useState("8081");
+	const [topic, setTopic] = React.useState("SSH/NCAS-M");
+	const [status, setStatus] = React.useState("Waiting for user input...");
+	const [logs, setLogs] = React.useState(null);
+
+	const handleHost = (event) => {
+		setHost(event.target.value);
+	};
+	const handlePort = (event) => {
+		setPort(event.target.value);
+	};
+	const handleTopic = (event) => {
+		setTopic(event.target.value);
+	};
 
 	const broker_connect = () => {
-		console.log(host, port, topic, logs);
 		console.log("Connecting...");
 
-		logs = [];
-		status = "Connecting to ...";
+		setLogs(null);
+		var messages = [];
 
-		var client = mqtt.connect(protocol + "://" + host + ":" + port + "/");
+		var client = mqtt.connect(host + ":" + port);
 
-		client.on("connect", function () {
-			status = "Connected!";
+		client.on("connect", () => {
 			console.log("Connected!");
-			client.subscribe(topic);
-			client.publish(topic, "Current time is: " + new Date());
+			setStatus("Connected!");
+
+			client.subscribe(topic, () => {
+				client.publish(topic, "Device connected at time: " + new Date());
+			});
 		});
 
 		client.on("error", (err) => {
@@ -30,8 +40,16 @@ export default function Logger() {
 			client.end();
 		});
 
-		client.on(topic, function (topic, message) {
-			console.log(message);
+		client.on("message", (topic, message) => {
+			console.log(message.toString());
+			messages.push(message.toString());
+			console.log(messages);
+
+			setLogs(
+				messages.map((msg, index) => {
+					return <li key={index}>{msg}</li>;
+				})
+			);
 		});
 	};
 
@@ -41,15 +59,15 @@ export default function Logger() {
 				<div className="heading-container">Connection Options</div>
 				<div className="option">
 					<h3>Host</h3>
-					<input type="text" defaultValue={host} />
+					<input type="text" value={host} onChange={handleHost} />
 				</div>
 				<div className="option">
 					<h3>Port</h3>
-					<input type="number" defaultValue={port} />
+					<input type="number" value={port} onChange={handlePort} />
 				</div>
 				<div className="option">
 					<h3>Topic</h3>
-					<input type="text" defaultValue={topic} />
+					<input type="text" value={topic} onChange={handleTopic} />
 				</div>
 				<div className="confirm-button">
 					<button id="confirm-button" onClick={broker_connect}>
@@ -61,7 +79,8 @@ export default function Logger() {
 				<div className="heading-container">Message Logs</div>
 				<div id="logger">
 					{status}
-					{logs}
+					<br />
+					<ul className="logs">{logs}</ul>
 				</div>
 			</div>
 		</div>
