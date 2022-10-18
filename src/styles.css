@@ -82,20 +82,22 @@ input[type="radio"] {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-start;
-	justify-content: space-evenly;
+	justify-content: space-around;
 }
 
 .options-container {
-	margin: 0.5rem;
+	margin: 1rem;
 	background: white;
-	width: 15rem;
+	width: 20%;
+	min-width: 15rem;
 	background: var(--container-color);
 	box-shadow: var(--container-shadow);
 }
 
 .data-container {
-	margin: 0.5rem;
+	margin: 1rem;
 	background: white;
+	width: 70%;
 	min-width: 40rem;
 	min-height: 40rem;
 	background: var(--container-color);
@@ -137,4 +139,16 @@ input[type="radio"] {
 
 #confirm-button:active {
 	cursor: wait;
+}
+
+.status {
+	font-weight: bold;
+	margin: 0.5rem;
+}
+
+.logs {
+	border-top: 2px dashed black;
+	border-bottom: 2px dashed black;
+	text-indent: 0.5rem;
+	line-height: 0;
 }

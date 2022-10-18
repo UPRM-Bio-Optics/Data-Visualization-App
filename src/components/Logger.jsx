@@ -2,9 +2,9 @@ import * as React from "react";
 import mqtt from "precompiled-mqtt";
 
 export default function Logger() {
-	const [host, setHost] = React.useState("mqtt://test.mosquitto.org");
-	const [port, setPort] = React.useState("8081");
-	const [topic, setTopic] = React.useState("SSH/NCAS-M");
+	const [host, setHost] = React.useState("broker.emqx.io");
+	const [port, setPort] = React.useState("8083");
+	const [topic, setTopic] = React.useState("bio-optics");
 	const [status, setStatus] = React.useState("Waiting for user input...");
 	const [logs, setLogs] = React.useState(null);
 
@@ -24,14 +24,14 @@ export default function Logger() {
 		setLogs(null);
 		var messages = [];
 
-		var client = mqtt.connect(host + ":" + port);
+		var client = mqtt.connect("ws://"+ host + ":" + port + "/mqtt");
 
 		client.on("connect", () => {
 			console.log("Connected!");
 			setStatus("Connected!");
 
 			client.subscribe(topic, () => {
-				client.publish(topic, "Device connected at time: " + new Date());
+				client.publish(topic, "Web app connected at time: " + new Date());
 			});
 		});
 
@@ -42,12 +42,12 @@ export default function Logger() {
 
 		client.on("message", (topic, message) => {
 			console.log(message.toString());
-			messages.push(message.toString());
+			messages.unshift(message.toString());
 			console.log(messages);
 
 			setLogs(
 				messages.map((msg, index) => {
-					return <li key={index}>{msg}</li>;
+					return <div><p>{msg}</p></div>;
 				})
 			);
 		});
@@ -78,9 +78,8 @@ export default function Logger() {
 			<div className="data-container">
 				<div className="heading-container">Message Logs</div>
 				<div id="logger">
-					{status}
-					<br />
-					<ul className="logs">{logs}</ul>
+					<p className="status">{status}</p>
+					<div className="logs">{logs}</div>
 				</div>
 			</div>
 		</div>
