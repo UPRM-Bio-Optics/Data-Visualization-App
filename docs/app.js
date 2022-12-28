@@ -67,7 +67,7 @@ async function init() {
 
 			// Set the url to the echosounder files
 			url =
-				"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/depth_data/";
+				"https://raw.githubusercontent.com/UPRM-Bio-Optics/Bathymetry-Observation-Boat/main/Data/echo_sounder/";
 		}
 
 		// Add spectrometer files to dropdown if the sensor is selected
@@ -103,12 +103,12 @@ async function fetchFiles() {
 			.then((data) => {
 				for (i in data.tree) {
 					if (
-						data.tree[i].path.includes("depth_data") &&
+						data.tree[i].path.includes("echo_sounder") &&
 						data.tree[i].path.includes("csv")
 					) {
 						console.log("Echosouder files: ", data.tree[i].path);
 						echosounder_files.push(
-							data.tree[i].path.replace("Data/depth_data/", "")
+							data.tree[i].path.replace("Data/echo_sounder/", "")
 						);
 					}
 					if (
